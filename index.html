@@ -1044,14 +1044,17 @@ nav.scrolled { background: #080812f0; }
 .manual-btn .manual-size {
   font-size: 11px; color: var(--text-dim); font-weight: 500;
 }
-.manual-sha {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 11px; color: var(--text-dim);
+.manual-sha-link {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; text-decoration: none;
   background: #0a0a14; border: 1px solid var(--border);
-  border-radius: 8px; padding: 8px 10px;
+  border-radius: 8px; padding: 9px 12px;
   margin-bottom: 12px;
-  overflow: hidden;
+  transition: all 0.2s;
+}
+.manual-sha-link:hover {
+  border-color: var(--green);
+  background: #0e1a12;
 }
 .manual-sha-label {
   font-family: 'Inter', sans-serif;
@@ -1059,23 +1062,13 @@ nav.scrolled { background: #080812f0; }
   color: var(--green); letter-spacing: 1px;
   flex-shrink: 0;
 }
-.manual-sha-code {
-  flex: 1; overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; font-size: 10.5px;
-  color: var(--text);
+.manual-sha-linktext {
+  font-size: 12px; color: var(--text-dim);
+  font-weight: 500;
+  transition: color 0.2s;
 }
-.manual-copy {
-  background: transparent; border: 1px solid var(--border);
-  color: var(--text-dim); width: 28px; height: 24px;
-  border-radius: 6px; cursor: pointer; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.2s;
-}
-.manual-copy:hover {
-  color: var(--green); border-color: var(--green);
-}
-.manual-copy.copied {
-  color: var(--green); border-color: var(--green);
+.manual-sha-link:hover .manual-sha-linktext {
+  color: var(--green);
 }
 .manual-steps {
   border-top: 1px solid var(--border);
@@ -1130,8 +1123,48 @@ nav.scrolled { background: #080812f0; }
 }
 .manual-security a { color: var(--green); font-weight: 600; }
 @media (max-width: 720px) {
-  .manual-install { padding: 28px 18px; }
-  .manual-grid { grid-template-columns: 1fr; }
+  .manual-install { padding: 24px 16px; }
+  .manual-grid { grid-template-columns: 1fr; gap: 14px; }
+  .manual-card { padding: 18px; }
+  /* Shrink orb in header so card chrome doesn't dominate */
+  .manual-card-head { gap: 12px; margin-bottom: 14px; }
+  .manual-card-head .dl-card-icon { width: 40px; height: 40px; font-size: 20px; }
+  /* Download button: wrap filename, pin size below-right */
+  .manual-btn {
+    flex-wrap: wrap; gap: 4px 10px;
+    padding: 11px 14px; font-size: 12.5px;
+  }
+  .manual-btn > span:first-child { flex: 1 1 100%; min-width: 0; word-break: break-word; }
+  .manual-btn .manual-size { flex: 0 0 auto; margin-left: auto; font-size: 10.5px; opacity: 0.78; }
+  /* SHA link: same horizontal layout, just snug padding on narrow screens */
+  .manual-sha-link { padding: 8px 10px; }
+  .manual-sha-linktext { font-size: 11.5px; }
+  /* Security footer: stack icon + text vertically so content doesn't squeeze */
+  .manual-security { padding: 16px 18px; gap: 10px; }
+  /* Section padding compaction — less wasted vertical space on small screens */
+  .features-section,
+  .faq-section,
+  .pricing-section,
+  .legal-section,
+  .howto-section { padding: 56px 20px; }
+  .showcase { padding: 32px 16px; }
+  .showcase-card { padding: 28px 22px; }
+  .proof-bar { padding: 28px 16px; }
+  .download-section { padding: 32px 16px 56px; }
+  /* Give content room to clear the sticky mobile install CTA bar */
+  body { padding-bottom: 84px; }
+  .back-to-top { bottom: 96px; }
+  /* Legal card chrome compaction */
+  .legal-card { padding: 22px 20px; margin-bottom: 12px; }
+  /* Feature card padding shrink */
+  .feature-card { padding: 22px 20px; }
+  /* Tighter section titles on mobile */
+  .section-title { font-size: clamp(24px, 7vw, 30px); margin-bottom: 10px; }
+  .section-subtitle { font-size: 15px; margin-bottom: 32px; }
+  /* How-to step numbers smaller */
+  .howto-step { padding: 28px 22px; }
+  /* Price card a little tighter */
+  .price-card { padding: 28px 24px; }
 }
 
 /* ── FAQ ──────────────────────────────────────── */
@@ -1808,7 +1841,7 @@ nav.scrolled { background: #080812f0; }
         <li><span class="icon included" aria-hidden="true">&#x2714;</span> Auto boost &amp; auto play</li>
         <li><span class="icon included" aria-hidden="true">&#x2714;</span> Input lock mode</li>
         <li><span class="icon included" aria-hidden="true">&#x2714;</span> Adaptive strategy engine</li>
-        <li><span class="icon included" aria-hidden="true">&#x2714;</span> Cancel anytime, refunded for unused trial</li>
+        <li><span class="icon included" aria-hidden="true">&#x2714;</span> Cancel any time — no charge if you cancel during trial</li>
       </ul>
       <a href="https://buy.stripe.com/cNieVf1PNgctgiAaiT8og00" target="_blank" rel="noopener" class="price-btn primary">Start Free Trial</a>
       <p class="price-fineprint">No charge until trial ends &middot; Cancel anytime from the popup</p>
@@ -1894,13 +1927,12 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-chrome.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-chrome.zip</span>
-          <span class="manual-size" data-size-for="chrome">209.8 KB</span>
+          <span class="manual-size" data-size-for="chrome">211.5 KB</span>
         </a>
-        <div class="manual-sha" data-sha-for="chrome">
+        <a class="manual-sha-link" href="downloads/checksums.json#chrome" target="_blank" rel="noopener">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">23544bb74083d89d711031db380370a7490931426121b952b8e1df88a7c6c5e1</code>
-          <button type="button" class="manual-copy" data-copy-for="chrome" aria-label="Copy SHA-256 hash">&#x2398;</button>
-        </div>
+          <span class="manual-sha-linktext">Verify fingerprint &rarr;</span>
+        </a>
         <details class="manual-steps">
           <summary>How to install unpacked in Chrome</summary>
           <ol>
@@ -1924,13 +1956,12 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-firefox.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-firefox.zip</span>
-          <span class="manual-size" data-size-for="firefox">209.9 KB</span>
+          <span class="manual-size" data-size-for="firefox">211.6 KB</span>
         </a>
-        <div class="manual-sha" data-sha-for="firefox">
+        <a class="manual-sha-link" href="downloads/checksums.json#firefox" target="_blank" rel="noopener">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">011fdd78605cd8599f270c15ba48bb51f35ef44127b4891bf0d0042389e1cf2d</code>
-          <button type="button" class="manual-copy" data-copy-for="firefox" aria-label="Copy SHA-256 hash">&#x2398;</button>
-        </div>
+          <span class="manual-sha-linktext">Verify fingerprint &rarr;</span>
+        </a>
         <details class="manual-steps">
           <summary>How to install unpacked in Firefox</summary>
           <ol>
@@ -1955,13 +1986,12 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-edge.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-edge.zip</span>
-          <span class="manual-size" data-size-for="edge">209.8 KB</span>
+          <span class="manual-size" data-size-for="edge">211.5 KB</span>
         </a>
-        <div class="manual-sha" data-sha-for="edge">
+        <a class="manual-sha-link" href="downloads/checksums.json#edge" target="_blank" rel="noopener">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">a2540b3017ddac1867af7f3930854e41d64b45e2e74b606420ff3400038e5fd9</code>
-          <button type="button" class="manual-copy" data-copy-for="edge" aria-label="Copy SHA-256 hash">&#x2398;</button>
-        </div>
+          <span class="manual-sha-linktext">Verify fingerprint &rarr;</span>
+        </a>
         <details class="manual-steps">
           <summary>How to install unpacked in Edge</summary>
           <ol>
@@ -1979,7 +2009,7 @@ nav.scrolled { background: #080812f0; }
       <div class="manual-security-icon" aria-hidden="true">&#x1f512;</div>
       <div>
         <h5>Signed &amp; integrity-verified builds</h5>
-        <p>Every release ZIP ships with a SHA-256 fingerprint published above and a per-file integrity manifest baked inside. The extension runtime verifies its own bot code before activation &mdash; tampered builds refuse to run. Full checksums: <a href="downloads/checksums.json" target="_blank" rel="noopener">checksums.json</a>.</p>
+        <p>Every release ZIP has a SHA-256 fingerprint published in <a href="downloads/checksums.json" target="_blank" rel="noopener">checksums.json</a> and a per-file integrity manifest baked inside the extension. The runtime verifies its own bot code before activation &mdash; tampered builds refuse to run.</p>
       </div>
     </div>
   </div>
@@ -2052,8 +2082,8 @@ nav.scrolled { background: #080812f0; }
     <details class="faq-item fade-up">
       <summary class="faq-q">How are releases signed and verified?</summary>
       <div class="faq-a">
-        <p>Every release ZIP is published on <a href="#manual-install">this site</a> with a SHA-256 fingerprint you can verify with one command. The extension also ships a per-file integrity manifest baked in at build time &mdash; the bot runtime hashes its own code on load and refuses to start if anything was tampered with.</p>
-        <p>Full machine-readable checksums: <a href="downloads/checksums.json" target="_blank" rel="noopener">downloads/checksums.json</a>.</p>
+        <p>Every release ZIP's SHA-256 fingerprint is published in a machine-readable manifest at <a href="downloads/checksums.json" target="_blank" rel="noopener">downloads/checksums.json</a>. Each <a href="#manual-install">download card</a> links directly to it so you can verify the fingerprint of any copy you receive.</p>
+        <p>The extension also ships a per-file integrity manifest baked in at build time &mdash; the bot runtime hashes its own code on load and refuses to start if anything was tampered with.</p>
       </div>
     </details>
 
@@ -2480,6 +2510,9 @@ nav.scrolled { background: #080812f0; }
     // Fail-soft: values are baked into the HTML at build time. This loader
     // only replaces them if the fetch succeeds, so offline/404 keeps the
     // baked values visible instead of wiping them to "unavailable".
+    // Populates size + version into the download cards. SHA-256 values
+    // are no longer baked into the HTML — users click "Verify fingerprint"
+    // to view the authoritative checksums.json directly.
     fetch(url, { cache: 'no-store' })
       .then(function (r) {
         if (!r.ok) throw new Error('checksums ' + r.status);
@@ -2489,35 +2522,13 @@ nav.scrolled { background: #080812f0; }
         if (!data || !data.builds) return;
         Object.keys(data.builds).forEach(function (platform) {
           var build = data.builds[platform];
-          var shaCode = document.querySelector('[data-sha-for="' + platform + '"] .manual-sha-code');
-          if (shaCode && build.sha256) shaCode.textContent = build.sha256;
           var size = document.querySelector('[data-size-for="' + platform + '"]');
           if (size && build.size) size.textContent = fmtBytes(build.size);
           var ver = document.querySelector('[data-version-for="' + platform + '"]');
           if (ver && build.version) ver.textContent = 'v' + build.version;
         });
       })
-      .catch(function () { /* keep the baked-in values */ });
-
-    // Copy-to-clipboard for SHA-256
-    var buttons = container.querySelectorAll('.manual-copy');
-    for (var b = 0; b < buttons.length; b++) {
-      (function (btn) {
-        btn.addEventListener('click', function () {
-          var platform = btn.getAttribute('data-copy-for');
-          var code = document.querySelector('[data-sha-for="' + platform + '"] .manual-sha-code');
-          if (!code) return;
-          var text = code.textContent || '';
-          if (!text || text.indexOf('computing') !== -1) return;
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(function () {
-              btn.classList.add('copied');
-              setTimeout(function () { btn.classList.remove('copied'); }, 1400);
-            });
-          }
-        });
-      })(buttons[b]);
-    }
+      .catch(function () { /* size/version fall back to baked defaults */ });
   })();
 
   // ── Browser detection: highlight install buttons + swap mobile CTA ──
@@ -2562,7 +2573,11 @@ nav.scrolled { background: #080812f0; }
     }
   })();
 
-  // ── Snake canvas animation ────────────────────
+  // ── Hero snake canvas — mini live demo of the product ───
+  // Mouse-follow when pointer is near the canvas; auto-pilot (AI bot
+  // demo) when idle; eats food on contact and grows. Tiny "AI" badge
+  // appears during auto-pilot so visitors see it as a product demo,
+  // not just decoration.
   var canvas = document.getElementById('snake-canvas');
   if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var ctx = canvas.getContext('2d');
@@ -2582,80 +2597,187 @@ nav.scrolled { background: #080812f0; }
     resize();
     window.addEventListener('resize', resize);
 
-    // Snake segments
+    // ─── Config ───────────────────────────────────
+    var MIN_SEGMENTS = 28;
+    var MAX_SEGMENTS = 90;
+    var FOOD_COUNT = 18;
+    var SEGMENT_SPACING = 8;
+    var SPEED = 1.9;
+    var EAT_RADIUS = 16;
+    var GROW_PER_EAT = 3;
+    var TURN_LERP = 0.12;          // how quickly the head snaps toward target angle
+    var MOUSE_IDLE_MS = 1500;      // after this long with no mouse, switch to AI
+    var AI_WAYPOINT_JITTER = 0.02; // small sinusoidal wander so the bot looks alive
+    var isTouch = window.matchMedia('(hover: none)').matches;
+
+    // ─── State ────────────────────────────────────
     var segments = [];
-    var segCount = 40;
     var angle = 0;
-    var speed = 1.8;
     var headX = W * 0.15;
     var headY = H / 2;
+    var targetAngle = 0;
+    var mouseX = -9999, mouseY = -9999;
+    var lastMouseMove = 0;
+    var now = 0;
+    var score = 0;
+    var mode = 'ai'; // 'ai' | 'mouse'
+    var aiBadgeAlpha = 0;
 
-    for (var s = 0; s < segCount; s++) {
-      segments.push({ x: headX - s * 12, y: headY });
+    for (var s = 0; s < MIN_SEGMENTS; s++) {
+      segments.push({ x: headX - s * SEGMENT_SPACING, y: headY });
     }
 
-    // Food particles
-    var foods = [];
-    for (var f = 0; f < 20; f++) {
-      foods.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        sz: 2 + Math.random() * 4,
+    // ─── Food ─────────────────────────────────────
+    function spawnFood() {
+      return {
+        x: 40 + Math.random() * (W - 80),
+        y: 30 + Math.random() * (H - 60),
+        sz: 2.5 + Math.random() * 3.5,
         hue: Math.floor(Math.random() * 360),
         pulse: Math.random() * Math.PI * 2
-      });
+      };
+    }
+    var foods = [];
+    for (var f = 0; f < FOOD_COUNT; f++) foods.push(spawnFood());
+
+    // ─── Input tracking ───────────────────────────
+    function updatePointer(clientX, clientY) {
+      var rect = canvas.getBoundingClientRect();
+      var nx = clientX - rect.left;
+      var ny = clientY - rect.top;
+      // Only count it as "over the canvas" if within the rect
+      if (nx >= 0 && nx <= W && ny >= 0 && ny <= H) {
+        mouseX = nx; mouseY = ny;
+        lastMouseMove = now;
+      }
+    }
+    if (!isTouch) {
+      canvas.addEventListener('mousemove', function (e) { updatePointer(e.clientX, e.clientY); });
+      canvas.addEventListener('mouseleave', function () { lastMouseMove = 0; });
+    } else {
+      // On touch, accept a tap as a 2-second steering impulse then fall back to AI
+      canvas.addEventListener('touchmove', function (e) {
+        if (e.touches && e.touches[0]) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      canvas.addEventListener('touchstart', function (e) {
+        if (e.touches && e.touches[0]) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
     }
 
-    var time = 0;
+    // ─── AI: pick nearest food, steer toward it ────
+    function aiTargetAngle() {
+      var bestDist = Infinity;
+      var bestFood = null;
+      for (var i = 0; i < foods.length; i++) {
+        var dx = foods[i].x - headX;
+        var dy = foods[i].y - headY;
+        var d = dx * dx + dy * dy;
+        if (d < bestDist) { bestDist = d; bestFood = foods[i]; }
+      }
+      if (!bestFood) return angle;
+      var ta = Math.atan2(bestFood.y - headY, bestFood.x - headX);
+      // Add a tiny sinusoidal wander so the path looks organic
+      ta += Math.sin(now * 0.0018) * AI_WAYPOINT_JITTER * 8;
+      // Gentle edge avoidance — if too close to the wall, bias toward center
+      var margin = 30;
+      if (headX < margin || headX > W - margin || headY < margin || headY > H - margin) {
+        var toCenter = Math.atan2(H / 2 - headY, W / 2 - headX);
+        ta = ta * 0.55 + toCenter * 0.45;
+      }
+      return ta;
+    }
 
-    function draw() {
-      time += 0.016;
+    // ─── Main loop ────────────────────────────────
+    function draw(ts) {
+      now = ts || 0;
+
       ctx.clearRect(0, 0, W, H);
 
-      // Draw food
+      // Decide steering mode
+      var mouseActive = (now - lastMouseMove) < MOUSE_IDLE_MS && mouseX > -9000;
+      mode = mouseActive ? 'mouse' : 'ai';
+
+      if (mode === 'mouse') {
+        targetAngle = Math.atan2(mouseY - headY, mouseX - headX);
+        aiBadgeAlpha = Math.max(0, aiBadgeAlpha - 0.04);
+      } else {
+        targetAngle = aiTargetAngle();
+        aiBadgeAlpha = Math.min(1, aiBadgeAlpha + 0.03);
+      }
+
+      // Smoothly rotate toward targetAngle (shortest-arc lerp)
+      var diff = targetAngle - angle;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      angle += diff * TURN_LERP;
+
+      // Advance
+      headX += Math.cos(angle) * SPEED;
+      headY += Math.sin(angle) * SPEED;
+
+      // Edge wrap (gentle — AI tries to avoid getting here)
+      if (headX > W + 20) headX = -20;
+      if (headX < -20) headX = W + 20;
+      if (headY > H + 20) headY = -20;
+      if (headY < -20) headY = H + 20;
+
+      // Update segment chain
+      segments[0].x = headX;
+      segments[0].y = headY;
+      for (var si = 1; si < segments.length; si++) {
+        var prev = segments[si - 1];
+        var cur = segments[si];
+        var sdx = prev.x - cur.x;
+        var sdy = prev.y - cur.y;
+        var sdist = Math.sqrt(sdx * sdx + sdy * sdy);
+        if (sdist > SEGMENT_SPACING) {
+          var pull = (sdist - SEGMENT_SPACING) / sdist;
+          cur.x += sdx * pull;
+          cur.y += sdy * pull;
+        }
+      }
+
+      // ── Food: pulse, eat, respawn ────────────────
       for (var fi = 0; fi < foods.length; fi++) {
         var fd = foods[fi];
         fd.pulse += 0.04;
-        var alpha = 0.4 + 0.3 * Math.sin(fd.pulse);
+
+        // Eat?
+        var edx = fd.x - headX;
+        var edy = fd.y - headY;
+        if (edx * edx + edy * edy < EAT_RADIUS * EAT_RADIUS) {
+          // Grow
+          for (var g = 0; g < GROW_PER_EAT && segments.length < MAX_SEGMENTS; g++) {
+            var tail = segments[segments.length - 1];
+            segments.push({ x: tail.x, y: tail.y });
+          }
+          score++;
+          foods[fi] = spawnFood();
+          // Force fresh food to spawn away from head so it's not immediately eaten
+          var tries = 0;
+          while (tries < 6) {
+            var ndx = foods[fi].x - headX;
+            var ndy = foods[fi].y - headY;
+            if (ndx * ndx + ndy * ndy > 120 * 120) break;
+            foods[fi] = spawnFood();
+            tries++;
+          }
+          continue;
+        }
+
+        var alpha = 0.45 + 0.3 * Math.sin(fd.pulse);
         var r = fd.sz + Math.sin(fd.pulse) * 1;
         ctx.beginPath();
         ctx.arc(fd.x, fd.y, r, 0, Math.PI * 2);
         ctx.fillStyle = 'hsla(' + fd.hue + ',100%,60%,' + alpha + ')';
         ctx.fill();
-        // Glow
         ctx.beginPath();
         ctx.arc(fd.x, fd.y, r * 2.5, 0, Math.PI * 2);
         ctx.fillStyle = 'hsla(' + fd.hue + ',100%,60%,' + (alpha * 0.15) + ')';
         ctx.fill();
       }
 
-      // Move snake head
-      angle += Math.sin(time * 0.7) * 0.03 + Math.cos(time * 1.3) * 0.015;
-      headX += Math.cos(angle) * speed;
-      headY += Math.sin(angle) * speed;
-
-      // Wrap around
-      if (headX > W + 20) headX = -20;
-      if (headX < -20) headX = W + 20;
-      if (headY > H + 20) headY = -20;
-      if (headY < -20) headY = H + 20;
-
-      // Update segments
-      segments[0].x = headX;
-      segments[0].y = headY;
-      for (var si = 1; si < segments.length; si++) {
-        var prev = segments[si - 1];
-        var cur = segments[si];
-        var dx = prev.x - cur.x;
-        var dy = prev.y - cur.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 10) {
-          cur.x += dx * 0.35;
-          cur.y += dy * 0.35;
-        }
-      }
-
-      // Draw snake body (glow)
+      // ── Body: glow pass + gradient pass ──────────
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       for (var pass = 0; pass < 2; pass++) {
@@ -2671,9 +2793,9 @@ nav.scrolled { background: #080812f0; }
           ctx.strokeStyle = 'rgba(57, 255, 20, 0.08)';
         } else {
           ctx.lineWidth = 10;
-          // Animated gradient
-          var grad = ctx.createLinearGradient(segments[segments.length-1].x, 0, segments[0].x, 0);
-          var hueShift = (time * 40) % 360;
+          var tail2 = segments[segments.length - 1];
+          var grad = ctx.createLinearGradient(tail2.x, 0, segments[0].x, 0);
+          var hueShift = (now * 0.04) % 360;
           grad.addColorStop(0, 'hsla(' + hueShift + ',100%,50%,0.3)');
           grad.addColorStop(0.5, 'hsla(' + ((hueShift + 120) % 360) + ',100%,60%,0.9)');
           grad.addColorStop(1, 'hsla(' + ((hueShift + 240) % 360) + ',100%,50%,0.8)');
@@ -2682,7 +2804,7 @@ nav.scrolled { background: #080812f0; }
         ctx.stroke();
       }
 
-      // Draw head
+      // ── Head ────────────────────────────────────
       ctx.beginPath();
       ctx.arc(headX, headY, 7, 0, Math.PI * 2);
       ctx.fillStyle = '#39ff14';
@@ -2692,13 +2814,58 @@ nav.scrolled { background: #080812f0; }
       ctx.fillStyle = 'rgba(57,255,20,0.15)';
       ctx.fill();
 
-      // Eye
+      // Eye points in direction of travel
       var eyeX = headX + Math.cos(angle) * 4;
       var eyeY = headY + Math.sin(angle) * 4;
       ctx.beginPath();
       ctx.arc(eyeX, eyeY, 2.5, 0, Math.PI * 2);
       ctx.fillStyle = '#080812';
       ctx.fill();
+
+      // ── AI badge — shows during auto-pilot ──────
+      if (aiBadgeAlpha > 0.02) {
+        var bx = headX + Math.cos(angle + Math.PI / 2) * 18;
+        var by = headY + Math.sin(angle + Math.PI / 2) * 18;
+        var pulse = 0.75 + 0.25 * Math.sin(now * 0.006);
+        ctx.save();
+        ctx.globalAlpha = aiBadgeAlpha * pulse;
+        // Capsule
+        ctx.fillStyle = 'rgba(57,255,20,0.18)';
+        ctx.strokeStyle = 'rgba(57,255,20,0.85)';
+        ctx.lineWidth = 1.25;
+        var bw = 30, bh = 15, br = 7;
+        var bx0 = bx - bw / 2, by0 = by - bh / 2;
+        ctx.beginPath();
+        ctx.moveTo(bx0 + br, by0);
+        ctx.lineTo(bx0 + bw - br, by0);
+        ctx.quadraticCurveTo(bx0 + bw, by0, bx0 + bw, by0 + br);
+        ctx.lineTo(bx0 + bw, by0 + bh - br);
+        ctx.quadraticCurveTo(bx0 + bw, by0 + bh, bx0 + bw - br, by0 + bh);
+        ctx.lineTo(bx0 + br, by0 + bh);
+        ctx.quadraticCurveTo(bx0, by0 + bh, bx0, by0 + bh - br);
+        ctx.lineTo(bx0, by0 + br);
+        ctx.quadraticCurveTo(bx0, by0, bx0 + br, by0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // Label
+        ctx.fillStyle = '#39ff14';
+        ctx.font = '700 9px "Inter", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('AI BOT', bx, by + 0.5);
+        ctx.restore();
+      }
+
+      // ── Score chip (top-right) — bottom of snake-demo ──
+      ctx.save();
+      ctx.globalAlpha = 0.78;
+      ctx.font = '600 10px "JetBrains Mono", ui-monospace, monospace';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fillText('score ' + score, W - 12, 10);
+      ctx.restore();
 
       requestAnimationFrame(draw);
     }
