@@ -1,1 +1,0 @@
-# slither-pro-privacy
