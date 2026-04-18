@@ -235,6 +235,22 @@
         },
         {
           "@type": "Question",
+          "name": "Does the AI bot work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Pro status is re-verified with our server every time you open the extension popup and every time slither.io loads. If the extension can't confirm an active subscription for more than 24 hours, the bot automatically stops until you're back online and verified. Chat, skins, zoom, HUD, minimap, and death recap remain available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are Slither Pro releases signed and verified?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every release ZIP is published with a SHA-256 fingerprint. The extension ships a per-file integrity manifest baked in at build time — the bot runtime hashes its own code on load and refuses to start if anything was tampered with. Full checksums are published at downloads/checksums.json."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Does Slither Pro work on mobile devices?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -1878,11 +1894,11 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-chrome.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-chrome.zip</span>
-          <span class="manual-size" data-size-for="chrome">~210 KB</span>
+          <span class="manual-size" data-size-for="chrome">209.8 KB</span>
         </a>
         <div class="manual-sha" data-sha-for="chrome">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">computing&hellip;</code>
+          <code class="manual-sha-code">23544bb74083d89d711031db380370a7490931426121b952b8e1df88a7c6c5e1</code>
           <button type="button" class="manual-copy" data-copy-for="chrome" aria-label="Copy SHA-256 hash">&#x2398;</button>
         </div>
         <details class="manual-steps">
@@ -1908,11 +1924,11 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-firefox.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-firefox.zip</span>
-          <span class="manual-size" data-size-for="firefox">~210 KB</span>
+          <span class="manual-size" data-size-for="firefox">209.9 KB</span>
         </a>
         <div class="manual-sha" data-sha-for="firefox">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">computing&hellip;</code>
+          <code class="manual-sha-code">011fdd78605cd8599f270c15ba48bb51f35ef44127b4891bf0d0042389e1cf2d</code>
           <button type="button" class="manual-copy" data-copy-for="firefox" aria-label="Copy SHA-256 hash">&#x2398;</button>
         </div>
         <details class="manual-steps">
@@ -1939,11 +1955,11 @@ nav.scrolled { background: #080812f0; }
         </div>
         <a class="manual-btn" href="downloads/slither-pro-edge.zip" download>
           <span>&#x2b07;&#xfe0f; Download slither-pro-edge.zip</span>
-          <span class="manual-size" data-size-for="edge">~210 KB</span>
+          <span class="manual-size" data-size-for="edge">209.8 KB</span>
         </a>
         <div class="manual-sha" data-sha-for="edge">
           <span class="manual-sha-label">SHA-256</span>
-          <code class="manual-sha-code">computing&hellip;</code>
+          <code class="manual-sha-code">a2540b3017ddac1867af7f3930854e41d64b45e2e74b606420ff3400038e5fd9</code>
           <button type="button" class="manual-copy" data-copy-for="edge" aria-label="Copy SHA-256 hash">&#x2398;</button>
         </div>
         <details class="manual-steps">
@@ -2021,6 +2037,23 @@ nav.scrolled { background: #080812f0; }
       <summary class="faq-q">How do I cancel my Pro subscription?</summary>
       <div class="faq-a">
         <p>Cancel anytime through the Stripe billing portal, accessible directly from the extension popup. Your Pro access stays active until the end of your current billing period. No prorated refunds for partial months.</p>
+      </div>
+    </details>
+
+    <details class="faq-item fade-up">
+      <summary class="faq-q">Does the AI bot work offline?</summary>
+      <div class="faq-a">
+        <p>Short answer: <strong>no</strong>. Slither.io itself needs an internet connection, and so does Pro subscription verification.</p>
+        <p>Your Pro status is re-verified with our server every time you open the extension popup and every time you load slither.io. If the extension can&rsquo;t confirm an active subscription for more than 24 hours, the bot automatically stops until you&rsquo;re back online and verified. This keeps cancellations and refunds honest, and stops shared or leaked credentials from running indefinitely.</p>
+        <p>All other features &mdash; chat, skins, zoom, HUD, minimap, death recap &mdash; remain available regardless.</p>
+      </div>
+    </details>
+
+    <details class="faq-item fade-up">
+      <summary class="faq-q">How are releases signed and verified?</summary>
+      <div class="faq-a">
+        <p>Every release ZIP is published on <a href="#manual-install">this site</a> with a SHA-256 fingerprint you can verify with one command. The extension also ships a per-file integrity manifest baked in at build time &mdash; the bot runtime hashes its own code on load and refuses to start if anything was tampered with.</p>
+        <p>Full machine-readable checksums: <a href="downloads/checksums.json" target="_blank" rel="noopener">downloads/checksums.json</a>.</p>
       </div>
     </details>
 
@@ -2444,6 +2477,9 @@ nav.scrolled { background: #080812f0; }
       return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
     }
 
+    // Fail-soft: values are baked into the HTML at build time. This loader
+    // only replaces them if the fetch succeeds, so offline/404 keeps the
+    // baked values visible instead of wiping them to "unavailable".
     fetch(url, { cache: 'no-store' })
       .then(function (r) {
         if (!r.ok) throw new Error('checksums ' + r.status);
@@ -2461,11 +2497,7 @@ nav.scrolled { background: #080812f0; }
           if (ver && build.version) ver.textContent = 'v' + build.version;
         });
       })
-      .catch(function () {
-        // Leave placeholder "computing..." text; manual install still works.
-        var codes = container.querySelectorAll('.manual-sha-code');
-        for (var i = 0; i < codes.length; i++) codes[i].textContent = 'unavailable';
-      });
+      .catch(function () { /* keep the baked-in values */ });
 
     // Copy-to-clipboard for SHA-256
     var buttons = container.querySelectorAll('.manual-copy');
