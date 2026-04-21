@@ -1,27 +1,27 @@
 {
   "schema": "slither-pro/checksums/v1",
-  "version": "1.2.2",
-  "generatedAt": "2026-04-20T02:16:23.526Z",
+  "version": "1.2.3",
+  "generatedAt": "2026-04-21T10:18:37.364Z",
   "builds": {
     "chrome": {
       "file": "slither-pro-chrome.zip",
-      "version": "1.2.2",
-      "size": 243673,
-      "sha256": "9e954c4d447bbd7d9c9e8b520657621a75cbc030b37f1074c2d81f5f86014d4c",
+      "version": "1.2.3",
+      "size": 256663,
+      "sha256": "3a4bf0b4a6bad7e99b6420f0e63e827952a427e5837f4b24b2cd7bb49a0322b8",
       "botIntegrity": "c6085d490c9faa01758cbe40eba7993c4580d988cbba8aa2d33c944bb6e6761e"
     },
     "firefox": {
       "file": "slither-pro-firefox.zip",
-      "version": "1.2.2",
-      "size": 243769,
-      "sha256": "070d8430fc3c3cb19799366b7fa063c82b31a484bb305e902304444dffd4645b",
+      "version": "1.2.3",
+      "size": 256753,
+      "sha256": "e7f2f9535db72d4712b8e407c2c62c1e2ab89a48290442c028b316bd3ad1c28e",
       "botIntegrity": "c6085d490c9faa01758cbe40eba7993c4580d988cbba8aa2d33c944bb6e6761e"
     },
     "edge": {
       "file": "slither-pro-edge.zip",
-      "version": "1.2.2",
-      "size": 243689,
-      "sha256": "9788103f51f1b524a965403f71ea22311df8e602c803b0e62e56efba11f6e1c8",
+      "version": "1.2.3",
+      "size": 256679,
+      "sha256": "0d72115a2deb0e55064da23c489c5f3f7b61bfe6715ed58dcefd420c025b6d47",
       "botIntegrity": "c6085d490c9faa01758cbe40eba7993c4580d988cbba8aa2d33c944bb6e6761e"
     }
   }
